@@ -1,0 +1,87 @@
+spring:
+  applocation:
+    name: ehcachedemo
+  profiles:
+    active: dev
+  devtools:
+    add-properties: false
+  datasource:
+    hikari:
+      poolName: Hikari
+      auto-commit: false
+  jpa:
+    open-in-view: false
+    hibernate:
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: "UTC"
+        globally_quoted_identifiers: true
+  liquibase:
+    change-log: classpath:liquibase/master.xml
+  security:
+    oauth2:
+      client:
+        provider:
+          oidc:
+            issuer-uri: https://${KEYCLOAK_HOSTNAME}/realms/${KEYCLOAK_REALMNAME}
+        registration:
+          oidc:
+            client-id: ${KEYCLOAK_CLIENT_ID}
+            client-secret: ${KEYCLOAK_CLIENT_SECRET}
+            scope: openid, profile, email, offline_access
+
+server:
+  port: 8000
+  shutdown: graceful
+
+---
+
+logging:
+  level:
+    web: DEBUG
+    org.hibernate.SQL: WARN
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: true
+  datasource:
+    url: jdbc:postgresql://${PSQL_DEV_HOSTNAME}:5432/${PSQL_DEV_DATABASE}
+    username: ${PSQL_DEV_USERNAME}
+    password: ${PSQL_DEV_PASSWORD}
+  liquibase:
+    contexts: dev
+    enabled: true
+
+---
+
+logging:
+  level:
+    web: WARN
+    org.hibernate.SQL: WARN
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+  devtools:
+    restart:
+      enabled: false
+    livereload:
+      enabled: false
+  datasource:
+    url: jdbc:postgresql://${PSQL_PROD_HOSTNAME}:5432/${PSQL_PROD_DATABASE}
+    username: ${PSQL_PROD_USERNAME}
+    password: ${PSQL_PROD_PASSWORD}
+  liquibase:
+    contexts: prod
+    enabled: false

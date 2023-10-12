@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd
+		http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd">
+
+	<changeSet id="23101101" author="nartkoc">
+		<createTable tableName="language">
+			<column name="languageUuid" type="uuid" defaultValueComputed="${uuidGenerate}">
+				<constraints primaryKey="true" primaryKeyName="pkLanguage" nullable="false"
+					unique="true" uniqueConstraintName="uxLanguageLanguageUuid" />
+			</column>
+			<column name="languageName" type="varchar(16)">
+				<constraints nullable="false" />
+			</column>
+			<column name="languageCode" type="varchar(4)">
+				<constraints nullable="false" />
+			</column>
+			<column name="languageImage" type="varchar(64)">
+				<constraints nullable="true" />
+			</column>
+			<column name="isDeleted" type="boolean" defaultValue="false">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+</databaseChangeLog>
